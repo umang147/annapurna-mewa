@@ -14,6 +14,8 @@ export function generateStaticParams() {
   }));
 }
 
+export const revalidate = 10; // Revalidate the page every 10 seconds
+
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 

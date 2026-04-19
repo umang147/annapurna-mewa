@@ -7,6 +7,8 @@ import { Truck, ShieldCheck, Leaf } from 'lucide-react';
 import { client } from '@/sanity/lib/client';
 import { productsQuery } from '@/sanity/lib/queries';
 
+export const revalidate = 10; // Revalidate the page every 10 seconds
+
 export default async function Home() {
   const hasSanityConfig = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'yoursanityprojectid';
   let products = MOCK_PRODUCTS;
