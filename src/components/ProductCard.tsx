@@ -28,7 +28,7 @@ export default function ProductCard({ product }: { product: any }) {
         
         <div className="space-y-4">
           <div className="flex flex-col gap-2">
-            {product.prices.map((p, idx) => (
+            {product.prices?.map((p: any, idx: number) => (
               <div key={idx} className="flex items-center justify-between text-sm border-b border-foreground/10 pb-1 last:border-0 last:pb-0">
                 <span className="font-medium text-foreground/80">{p.weight}</span>
                 <span className="font-bold text-brand-gold">₹{p.price}</span>
