@@ -7,6 +7,7 @@ import { MessageCircle, CheckCircle2, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { client } from '@/sanity/lib/client';
 import { productBySlugQuery } from '@/sanity/lib/queries';
+import ProductImageCarousel from '@/components/ProductImageCarousel';
 
 export function generateStaticParams() {
   return MOCK_PRODUCTS.map((p) => ({
@@ -34,10 +35,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     notFound();
   }
 
-  const firstImage = product.imagePaths?.[0] || product.imagePath;
+  const validImagePaths = (product.imagePaths || []).filter(Boolean);
+  const firstImage = validImagePaths[0] || product.imagePath;
   const imageSource = firstImage?.includes('placeholder') || !firstImage ? '/images/hero.png' : firstImage;
-  const imagesToRender = (product.imagePaths && product.imagePaths.length > 0) ? product.imagePaths : [imageSource];
-
+  const imagesToRender = validImagePaths.length > 0 ? validImagePaths : [imageSource];
   const phoneNumber = '917259496740';
   const whatsappMessage = encodeURIComponent(`Hi Shikha, I'm interested in purchasing the ${product.name} from Annapurna Mewa. Could you please share more details?`);
   const whatsappLink = `https://wa.me/${phoneNumber}?text=${whatsappMessage}`;
@@ -54,29 +55,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="glass rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
           
           {/* Image Section */}
-          <div className="md:w-1/2 relative min-h-[400px] md:min-h-[600px] flex overflow-x-auto snap-x snap-mandatory no-scrollbar bg-neutral-900">
-             {imagesToRender.map((src: string, i: number) => (
-               <div key={i} className="min-w-full relative h-full shrink-0 snap-center">
-                 <Image 
-                   src={src}
-                   alt={`${product.name} image ${i+1}`}
-                   fill
-                   className="object-cover"
-                   priority={i === 0}
-                 />
-               </div>
-             ))}
-             <div className="absolute top-6 left-6 z-10 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full text-sm font-semibold tracking-wider text-brand-gold">
-               {product.category}
-             </div>
-             {imagesToRender.length > 1 && (
-               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                 {imagesToRender.map((_: any, i: number) => (
-                   <div key={i} className="w-2 h-2 rounded-full bg-white/50 backdrop-blur-md border border-black/10 shadow-sm"></div>
-                 ))}
-               </div>
-             )}
-          </div>
+          <ProductImageCarousel 
+            images={imagesToRender} 
+            productName={product.name} 
+            category={product.category} 
+          />
           
           {/* Content Section */}
           <div className="md:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col">
