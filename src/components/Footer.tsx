@@ -31,6 +31,16 @@ export default function Footer() {
             <li><a href="#" className="hover:text-brand-gold transition-colors">Home</a></li>
             <li><a href="#products" className="hover:text-brand-gold transition-colors">Products</a></li>
             <li><a href="/studio" className="hover:text-brand-gold transition-colors">Admin Login</a></li>
+            <li>
+              <a 
+                href="https://chat.whatsapp.com/BqA4cJRFfP0K5Cg6hzb5tl" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[#25D366] hover:text-[#20bd5a] font-medium transition-colors"
+              >
+                Join WhatsApp Group
+              </a>
+            </li>
           </ul>
         </div>
 

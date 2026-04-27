@@ -23,6 +23,14 @@ export default function Header() {
           <Link href="/" className="hover:text-brand-red transition-colors">Home</Link>
           <Link href="#products" className="hover:text-brand-red transition-colors">Shop Catalog</Link>
           <Link href="#contact" className="hover:text-brand-red transition-colors">Contact</Link>
+          <a 
+            href="https://chat.whatsapp.com/BqA4cJRFfP0K5Cg6hzb5tl" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="bg-[#25D366] hover:bg-[#20bd5a] text-white px-4 py-2 rounded-full font-bold transition-colors shadow-sm flex items-center gap-2"
+          >
+            Join WhatsApp
+          </a>
         </nav>
         <div className="md:hidden">
            {/* Mobile menu could go here */}
