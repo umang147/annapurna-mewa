@@ -11,7 +11,7 @@ export default function ProductCard({ product }: { product: any }) {
   return (
     <Link href={`/product/${product.slug}`} className="block h-full group">
       <div className="glass rounded-2xl overflow-hidden hover-glow flex flex-col h-full animate-fade-in-up">
-        <div className="relative h-64 w-full">
+        <div className="relative aspect-square w-full">
           <Image 
             src={imageSource}
             alt={product.name}

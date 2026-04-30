@@ -73,7 +73,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <div className="grid gap-3">
                 {product.prices?.map((p: any, idx: number) => (
                   <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-foreground/5 border border-foreground/10 hover:border-brand-gold/50 transition-colors">
-                    <span className="font-medium text-lg text-foreground">{p.weight}</span>
+                    <span className="font-medium text-lg text-foreground">
+                      {p.weight?.replace(/gr/i, ' Gms')?.replace(/kg/i, ' Kg')}
+                    </span>
                     <span className="font-bold text-xl text-brand-gold">₹{p.price}</span>
                   </div>
                 ))}
