@@ -1,3 +1,4 @@
+import { Metadata, ResolvingMetadata } from 'next';
 import { MOCK_PRODUCTS } from '@/data/mockProducts';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -16,6 +17,55 @@ export function generateStaticParams() {
 }
 
 export const revalidate = 10; // Revalidate the page every 10 seconds
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { slug } = await params;
+  
+  const hasSanityConfig = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'yoursanityprojectid';
+  let product: any = null;
+  
+  if (hasSanityConfig) {
+    product = await client.fetch(productBySlugQuery, { slug: slug });
+  } else {
+    product = MOCK_PRODUCTS.find((p) => p.slug === slug);
+  }
+
+  if (!product) {
+    return {
+      title: 'Product Not Found | Annapurna Mewa'
+    };
+  }
+
+  const validImagePaths = (product.imagePaths || []).filter(Boolean);
+  const firstImage = validImagePaths[0] || product.imagePath;
+  const imageSource = firstImage?.includes('placeholder') || !firstImage ? '/images/hero.png' : firstImage;
+
+  return {
+    title: `${product.name} | Annapurna Mewa`,
+    description: product.description.substring(0, 160),
+    openGraph: {
+      title: `${product.name} | Annapurna Mewa`,
+      description: product.description.substring(0, 160),
+      images: [
+        {
+          url: imageSource,
+          width: 800,
+          height: 600,
+          alt: product.name,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${product.name} | Annapurna Mewa`,
+      description: product.description.substring(0, 160),
+      images: [imageSource],
+    },
+  };
+}
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
