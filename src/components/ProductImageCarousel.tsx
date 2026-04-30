@@ -29,7 +29,7 @@ export default function ProductImageCarousel({ images, productName, category }: 
   }, [activeIndex, images.length]);
 
   return (
-    <div className="w-full md:w-1/2 relative min-h-[400px] md:min-h-[600px] flex overflow-x-auto snap-x snap-mandatory no-scrollbar bg-neutral-900" ref={scrollContainerRef}>
+    <div className="w-full md:w-1/2 relative h-[400px] md:h-auto md:min-h-[600px] flex overflow-x-auto snap-x snap-mandatory no-scrollbar bg-neutral-900" ref={scrollContainerRef}>
       {images.map((src: string, i: number) => (
         <div key={i} className="min-w-full relative h-full shrink-0 snap-center">
           <Image 
