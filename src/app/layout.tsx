@@ -17,6 +17,13 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_IN',
     siteName: 'Annapurna Mewa',
+  },
+  icons: {
+    icon: [
+      { url: '/icon.png', type: 'image/png' },
+      { url: '/favicon.ico' },
+    ],
+    apple: '/icon.png',
   }
 };
 
