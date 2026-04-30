@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   }
 };
 
+import Script from 'next/script';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,6 +29,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-M66KP56TTK"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){window.dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-M66KP56TTK');
+          `}
+        </Script>
+      </head>
       <body className={`${outfit.variable} antialiased`}>
         {children}
       </body>
