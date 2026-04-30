@@ -30,7 +30,6 @@ export default function Footer() {
           <ul className="space-y-2 text-sm">
             <li><a href="#" className="hover:text-brand-gold transition-colors">Home</a></li>
             <li><a href="#products" className="hover:text-brand-gold transition-colors">Products</a></li>
-            <li><a href="/studio" className="hover:text-brand-gold transition-colors">Admin Login</a></li>
             <li>
               <a 
                 href="https://chat.whatsapp.com/BqA4cJRFfP0K5Cg6hzb5tl" 
