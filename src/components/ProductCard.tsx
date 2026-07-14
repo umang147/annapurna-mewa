@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Product } from '../data/mockProducts';
 import { ShoppingBag } from 'lucide-react';
+import { SeoProduct } from '@/lib/seo';
 
-export default function ProductCard({ product }: { product: any }) {
+export default function ProductCard({ product }: { product: SeoProduct }) {
   // Using the hero image as placeholder if specific not found
   const firstImage = product.imagePaths?.[0] || product.imagePath; // Support old seeded data
   const imageSource = firstImage?.includes('placeholder') || !firstImage ? '/images/hero.png' : firstImage;

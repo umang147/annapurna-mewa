@@ -6,12 +6,13 @@ import Image from 'next/image';
 import { Truck, ShieldCheck, Leaf } from 'lucide-react';
 import { client } from '@/sanity/lib/client';
 import { productsQuery } from '@/sanity/lib/queries';
+import { SeoProduct } from '@/lib/seo';
 
 export const revalidate = 10; // Revalidate the page every 10 seconds
 
 export default async function Home() {
   const hasSanityConfig = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'yoursanityprojectid';
-  let products = MOCK_PRODUCTS;
+  let products: SeoProduct[] = MOCK_PRODUCTS;
 
   if (hasSanityConfig) {
     products = await client.fetch(productsQuery);
@@ -36,7 +37,7 @@ export default async function Home() {
           
           <div className="relative z-10 text-center px-4 max-w-4xl animate-fade-in-up">
             <h1 className="text-5xl md:text-7xl font-serif font-bold text-white mb-6 drop-shadow-md">
-              Nature's Finest, <br/><span className="text-brand-gold italic">Handpicked for You.</span>
+              Nature&apos;s Finest, <br/><span className="text-brand-gold italic">Handpicked for You.</span>
             </h1>
             <p className="text-xl md:text-2xl text-neutral-200 mb-10 font-light drop-shadow-sm">
               Above-average quality dry fruits for your daily health. 
@@ -97,7 +98,7 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {products.map((product: any) => (
+            {products.map((product) => (
               <ProductCard key={product.id || product._id} product={product} />
             ))}
           </div>

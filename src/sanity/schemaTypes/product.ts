@@ -18,8 +18,29 @@ export const productType = defineType({
       options: {
         source: 'name',
         maxLength: 96,
+        slugify: (input) =>
+          input
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .slice(0, 96),
       },
-      validation: (rule) => rule.required(),
+      description: 'Click “Generate” after entering the product name. Use lowercase letters, numbers, and hyphens only.',
+      validation: (rule) =>
+        rule.required().custom((slug) => {
+          const current = slug?.current;
+
+          if (!current) {
+            return 'Slug is required. Click “Generate” before publishing.';
+          }
+
+          if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(current)) {
+            return 'Slug must use lowercase letters, numbers, and hyphens only. Example: 3pcs-split-cashew';
+          }
+
+          return true;
+        }),
     }),
     defineField({
       name: 'images',

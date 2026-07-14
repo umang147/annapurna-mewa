@@ -38,7 +38,7 @@ export default function ProductImageCarousel({ images, productName, category }: 
       if (scrollContainerRef.current) {
         const container = scrollContainerRef.current;
         const scrollWidth = container.clientWidth;
-        let nextIndex = activeIndex + 1;
+        const nextIndex = activeIndex + 1;
         
         container.scrollTo({
           left: scrollWidth * nextIndex,

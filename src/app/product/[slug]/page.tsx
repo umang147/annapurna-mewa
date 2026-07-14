@@ -1,14 +1,21 @@
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata } from 'next';
 import { MOCK_PRODUCTS } from '@/data/mockProducts';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { MessageCircle, CheckCircle2, ChevronLeft } from 'lucide-react';
+import { CheckCircle2, ChevronLeft, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import { client } from '@/sanity/lib/client';
 import { productBySlugQuery } from '@/sanity/lib/queries';
 import ProductImageCarousel from '@/components/ProductImageCarousel';
+import {
+  buildProductJsonLd,
+  getProductDescription,
+  getProductImages,
+  getProductTitle,
+  getProductUrl,
+  SeoProduct,
+} from '@/lib/seo';
 
 export function generateStaticParams() {
   return MOCK_PRODUCTS.map((p) => ({
@@ -19,39 +26,50 @@ export function generateStaticParams() {
 export const revalidate = 10; // Revalidate the page every 10 seconds
 
 export async function generateMetadata(
-  { params }: { params: Promise<{ slug: string }> },
-  parent: ResolvingMetadata
+  { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params;
   
   const hasSanityConfig = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'yoursanityprojectid';
-  let product: any = null;
+  let product: SeoProduct | null = null;
   
   if (hasSanityConfig) {
     product = await client.fetch(productBySlugQuery, { slug: slug });
   } else {
-    product = MOCK_PRODUCTS.find((p) => p.slug === slug);
+    product = MOCK_PRODUCTS.find((p) => p.slug === slug) || null;
   }
 
   if (!product) {
     return {
-      title: 'Product Not Found | Annapurna Mewa'
+      title: 'Product Not Found | Annapurna Mewa',
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
-  const validImagePaths = (product.imagePaths || []).filter(Boolean);
-  const firstImage = validImagePaths[0] || product.imagePath;
-  const imageSource = firstImage?.includes('placeholder') || !firstImage ? '/images/hero.png' : firstImage;
+  const title = getProductTitle(product);
+  const description = getProductDescription(product);
+  const images = getProductImages(product);
+  const url = getProductUrl(product);
 
   return {
-    title: `${product.name} | Annapurna Mewa`,
-    description: product.description.substring(0, 160),
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
-      title: `${product.name} | Annapurna Mewa`,
-      description: product.description.substring(0, 160),
+      title,
+      description,
+      url,
+      siteName: 'Annapurna Mewa',
+      locale: 'en_IN',
+      type: 'website',
       images: [
         {
-          url: imageSource,
+          url: images[0],
           width: 800,
           height: 600,
           alt: product.name,
@@ -60,9 +78,9 @@ export async function generateMetadata(
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${product.name} | Annapurna Mewa`,
-      description: product.description.substring(0, 160),
-      images: [imageSource],
+      title,
+      description,
+      images: [images[0]],
     },
   };
 }
@@ -73,12 +91,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   // If no sanity project ID is configured yet, fall back to mock data
   const hasSanityConfig = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'yoursanityprojectid';
   
-  let product: any = null;
+  let product: SeoProduct | null = null;
   
   if (hasSanityConfig) {
     product = await client.fetch(productBySlugQuery, { slug: slug });
   } else {
-    product = MOCK_PRODUCTS.find((p) => p.slug === slug);
+    product = MOCK_PRODUCTS.find((p) => p.slug === slug) || null;
   }
 
   if (!product) {
@@ -89,12 +107,17 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const firstImage = validImagePaths[0] || product.imagePath;
   const imageSource = firstImage?.includes('placeholder') || !firstImage ? '/images/hero.png' : firstImage;
   const imagesToRender = validImagePaths.length > 0 ? validImagePaths : [imageSource];
+  const productJsonLd = buildProductJsonLd(product);
   const phoneNumber = '917259496740';
   const whatsappMessage = encodeURIComponent(`Hi Shikha, I'm interested in purchasing the ${product.name} from Annapurna Mewa. Could you please share more details?`);
   const whatsappLink = `https://wa.me/${phoneNumber}?text=${whatsappMessage}`;
 
   return (
     <div className="flex flex-col min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <Header />
       
       <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
@@ -108,7 +131,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <ProductImageCarousel 
             images={imagesToRender} 
             productName={product.name} 
-            category={product.category} 
+            category={product.category || ''} 
           />
           
           {/* Content Section */}
@@ -121,7 +144,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div className="mb-10">
               <h3 className="text-sm font-bold uppercase tracking-wider text-foreground/50 mb-4">Pricing Options</h3>
               <div className="grid gap-3">
-                {product.prices?.map((p: any, idx: number) => (
+                {product.prices?.map((p, idx) => (
                   <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-foreground/5 border border-foreground/10 hover:border-brand-gold/50 transition-colors">
                     <span className="font-medium text-lg text-foreground">
                       {p.weight?.replace(/gr/i, ' Gms')?.replace(/kg/i, ' Kg')}
