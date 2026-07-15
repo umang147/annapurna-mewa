@@ -14,6 +14,7 @@ import {
   getProductImages,
   getProductTitle,
   getProductUrl,
+  jsonLdStringify,
   SeoProduct,
 } from '@/lib/seo';
 
@@ -116,7 +117,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     <div className="flex flex-col min-h-screen">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdStringify(productJsonLd) }}
       />
       <Header />
       

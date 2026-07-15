@@ -25,6 +25,96 @@ export type SeoProduct = {
   prices?: ProductPriceOption[];
 };
 
+export type BlogTextSpan = {
+  _key?: string;
+  _type?: 'span';
+  text?: string;
+  marks?: string[];
+};
+
+export type BlogMarkDef = {
+  _key: string;
+  _type: 'link' | 'internalProductLink';
+  href?: string;
+  blank?: boolean;
+  product?: BlogRelatedProduct;
+};
+
+export type BlogBlock = {
+  _key?: string;
+  _type: 'block';
+  style?: string;
+  listItem?: 'bullet' | 'number';
+  children?: BlogTextSpan[];
+  markDefs?: BlogMarkDef[];
+};
+
+export type BlogFaq = {
+  question: string;
+  answer: string;
+};
+
+export type BlogRelatedProduct = {
+  _id?: string;
+  name: string;
+  slug: string;
+  category?: string;
+  imagePath?: string;
+};
+
+export type BlogTableRow = {
+  label?: string;
+  value?: string;
+  note?: string;
+};
+
+export type BlogComparisonTable = {
+  _key?: string;
+  _type: 'comparisonTable';
+  title?: string;
+  rows?: BlogTableRow[];
+};
+
+export type BlogCta = {
+  title?: string;
+  text?: string;
+  label?: string;
+  href?: string;
+};
+
+export type BlogBodyItem = BlogBlock | BlogComparisonTable;
+
+export type SeoBlogPost = {
+  _id?: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  targetKeyword?: string;
+  secondaryKeywords?: string[];
+  searchIntent?: 'informational' | 'commercial' | 'transactional' | 'local' | 'navigational';
+  targetLocation?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  quickAnswer?: string;
+  keyTakeaways?: string[];
+  publishedAt: string;
+  updatedAt?: string;
+  lastReviewedAt?: string;
+  author?: string;
+  authorTitle?: string;
+  authorBio?: string;
+  reviewedBy?: string;
+  category?: string;
+  coverImageAlt?: string;
+  noIndex?: boolean;
+  imagePath?: string;
+  body?: BlogBodyItem[];
+  faqs?: BlogFaq[];
+  relatedProducts?: BlogRelatedProduct[];
+  relatedCategories?: string[];
+  cta?: BlogCta;
+};
+
 export function absoluteUrl(pathOrUrl = '/'): string {
   if (!pathOrUrl) {
     return siteUrl;
@@ -37,6 +127,10 @@ export function absoluteUrl(pathOrUrl = '/'): string {
   return `${siteUrl}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`;
 }
 
+export function jsonLdStringify(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, '\\u003c');
+}
+
 export function truncateDescription(text: string, maxLength = 155): string {
   const normalized = text.replace(/\s+/g, ' ').trim();
 
@@ -45,6 +139,114 @@ export function truncateDescription(text: string, maxLength = 155): string {
   }
 
   return `${normalized.slice(0, maxLength - 1).trimEnd()}…`;
+}
+
+export function getBlogPostUrl(post: SeoBlogPost): string {
+  return absoluteUrl(`/blog/${encodeURIComponent(post.slug || '')}`);
+}
+
+export function getBlogPostTitle(post: SeoBlogPost): string {
+  return post.metaTitle?.trim() || `${post.title} | ${brandName}`;
+}
+
+export function getBlogPostDescription(post: SeoBlogPost): string {
+  return truncateDescription(post.metaDescription || post.excerpt || defaultSeoDescription);
+}
+
+export function getBlogPostImage(post: SeoBlogPost): string {
+  return absoluteUrl(post.imagePath || '/images/hero.png');
+}
+
+export function getBlogPostImageSource(post: SeoBlogPost): string {
+  return post.imagePath || '/images/hero.png';
+}
+
+export function isValidBlogSlug(slug: unknown): slug is string {
+  return typeof slug === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+}
+
+export function estimateReadingTime(post: SeoBlogPost): number {
+  const bodyText = post.body
+    ?.flatMap((block) => {
+      if (block._type === 'comparisonTable') {
+        return block.rows?.flatMap((row) => [row.label, row.value, row.note]) || [];
+      }
+
+      return block.children?.map((child) => child.text || '') || [];
+    })
+    .join(' ') || '';
+  const faqText = post.faqs?.map((faq) => `${faq.question} ${faq.answer}`).join(' ') || '';
+  const takeawaysText = post.keyTakeaways?.join(' ') || '';
+  const wordCount = `${post.title} ${post.excerpt} ${post.quickAnswer || ''} ${takeawaysText} ${bodyText} ${faqText}`
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+
+  return Math.max(1, Math.ceil(wordCount / 200));
+}
+
+export function buildBlogPostingJsonLd(post: SeoBlogPost) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: getBlogPostDescription(post),
+    image: [getBlogPostImage(post)],
+    datePublished: post.publishedAt,
+    dateModified: post.lastReviewedAt || post.updatedAt || post.publishedAt,
+    author: {
+      '@type': 'Organization',
+      name: post.author || brandName,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: brandName,
+      logo: {
+        '@type': 'ImageObject',
+        url: absoluteUrl('/logo.png'),
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': getBlogPostUrl(post),
+    },
+    ...(post.keyTakeaways?.length ? { about: post.keyTakeaways } : {}),
+  };
+}
+
+export function buildFaqJsonLd(post: SeoBlogPost) {
+  const faqs = (post.faqs || [])
+    .filter((faq) => faq.question?.trim() && faq.answer?.trim());
+
+  if (faqs.length === 0) {
+    return null;
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
+export function buildBreadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
 }
 
 export function getProductDescription(product: SeoProduct): string {

@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -28,8 +29,9 @@ export default function Footer() {
         <div className="flex flex-col items-center md:items-start">
           <h4 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Quick Links</h4>
           <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:text-brand-gold transition-colors">Home</a></li>
-            <li><a href="#products" className="hover:text-brand-gold transition-colors">Products</a></li>
+            <li><Link href="/" className="hover:text-brand-gold transition-colors">Home</Link></li>
+            <li><Link href="/#products" className="hover:text-brand-gold transition-colors">Products</Link></li>
+            <li><Link href="/blog" className="hover:text-brand-gold transition-colors">Blog</Link></li>
             <li>
               <a 
                 href="https://chat.whatsapp.com/BqA4cJRFfP0K5Cg6hzb5tl" 

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
-import { buildLocalBusinessJsonLd, defaultSeoDescription, siteUrl } from '@/lib/seo';
+import { buildLocalBusinessJsonLd, defaultSeoDescription, jsonLdStringify, siteUrl } from '@/lib/seo';
 
 const outfit = Outfit({
   variable: '--font-sans',
@@ -59,7 +59,7 @@ export default function RootLayout({
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdStringify(localBusinessJsonLd) }}
         />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-M66KP56TTK"
