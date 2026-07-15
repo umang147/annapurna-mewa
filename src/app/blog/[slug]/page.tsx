@@ -7,6 +7,7 @@ import { CalendarDays, ChevronLeft, Clock, HelpCircle, Lightbulb, ShoppingBag } 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { FALLBACK_BLOG_POSTS } from '@/data/blogPosts';
+import { getRelatedBlogGuides } from '@/data/internalLinks';
 import { client } from '@/sanity/lib/client';
 import { blogPostBySlugQuery, blogPostSlugsQuery } from '@/sanity/lib/queries';
 import {
@@ -374,6 +375,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     { name: post.title, url: getBlogPostUrl(post) },
   ]);
   const readingTime = estimateReadingTime(post);
+  const relatedGuides = getRelatedBlogGuides({
+    excludeSlug: post.slug,
+    limit: 2,
+  });
   const headings = (post.body || [])
     .filter((block) => block._type === 'block' && block.style === 'h2')
     .map((block) => getBlockText(block))
@@ -565,6 +570,28 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                           )}
                         </div>
                         <span className="text-brand-red font-semibold text-sm">View</span>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {relatedGuides.length > 0 && (
+                <section className="mt-12">
+                  <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-foreground/50 mb-4">Related Guides</h2>
+                  <div className="grid gap-3">
+                    {relatedGuides.map((guide) => (
+                      <Link
+                        key={guide.slug}
+                        href={guide.href}
+                        className="group rounded-2xl bg-white/50 border border-foreground/10 p-5 hover:border-brand-gold/50 transition-colors"
+                      >
+                        <h3 className="font-serif text-xl font-bold text-foreground group-hover:text-brand-red transition-colors">
+                          {guide.title}
+                        </h3>
+                        <p className="mt-2 text-sm text-foreground/65 leading-6">
+                          {guide.description}
+                        </p>
                       </Link>
                     ))}
                   </div>

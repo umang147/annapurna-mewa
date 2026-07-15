@@ -32,6 +32,8 @@ export default function Footer() {
             <li><Link href="/" className="hover:text-brand-gold transition-colors">Home</Link></li>
             <li><Link href="/#products" className="hover:text-brand-gold transition-colors">Products</Link></li>
             <li><Link href="/blog" className="hover:text-brand-gold transition-colors">Blog</Link></li>
+            <li><Link href="/blog/dry-fruits-in-bangalore" className="hover:text-brand-gold transition-colors">Dry Fruits in Bangalore</Link></li>
+            <li><Link href="/blog/dry-fruits-price-in-bangalore" className="hover:text-brand-gold transition-colors">Dry Fruits Price Guide</Link></li>
             <li>
               <a 
                 href="https://chat.whatsapp.com/BqA4cJRFfP0K5Cg6hzb5tl" 

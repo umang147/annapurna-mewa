@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
 import { MOCK_PRODUCTS } from '@/data/mockProducts';
+import { getRelatedBlogGuides } from '@/data/internalLinks';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { notFound } from 'next/navigation';
-import { CheckCircle2, ChevronLeft, MessageCircle } from 'lucide-react';
+import { ArrowRight, BookOpenText, CheckCircle2, ChevronLeft, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import { client } from '@/sanity/lib/client';
 import { productBySlugQuery } from '@/sanity/lib/queries';
@@ -109,6 +110,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const imageSource = firstImage?.includes('placeholder') || !firstImage ? '/images/hero.png' : firstImage;
   const imagesToRender = validImagePaths.length > 0 ? validImagePaths : [imageSource];
   const productJsonLd = buildProductJsonLd(product);
+  const relatedGuides = getRelatedBlogGuides({
+    name: product.name,
+    category: product.category,
+    slug: product.slug,
+    limit: 3,
+  });
   const phoneNumber = '917259496740';
   const whatsappMessage = encodeURIComponent(`Hi Shikha, I'm interested in purchasing the ${product.name} from Annapurna Mewa. Could you please share more details?`);
   const whatsappLink = `https://wa.me/${phoneNumber}?text=${whatsappMessage}`;
@@ -188,6 +195,37 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
           
         </div>
+
+        {relatedGuides.length > 0 && (
+          <section className="mt-12">
+            <div className="flex items-center gap-3 mb-6">
+              <BookOpenText className="text-brand-gold" size={24} />
+              <div>
+                <p className="text-sm font-bold uppercase tracking-[0.2em] text-foreground/50">Helpful buying guides</p>
+                <h2 className="text-3xl font-serif font-bold text-foreground">Learn before you buy</h2>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {relatedGuides.map((guide) => (
+                <Link
+                  key={guide.slug}
+                  href={guide.href}
+                  className="group rounded-2xl bg-white/60 border border-foreground/10 p-5 hover:border-brand-gold/60 hover:bg-brand-gold/10 transition-colors"
+                >
+                  <h3 className="font-serif text-xl font-bold text-foreground mb-3 group-hover:text-brand-red transition-colors">
+                    {guide.title}
+                  </h3>
+                  <p className="text-sm text-foreground/65 leading-6 mb-5">
+                    {guide.description}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-brand-red">
+                    Read guide <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />

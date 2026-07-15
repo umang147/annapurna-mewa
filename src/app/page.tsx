@@ -1,9 +1,11 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
+import { BLOG_GUIDES } from '@/data/internalLinks';
 import { MOCK_PRODUCTS } from '@/data/mockProducts';
 import Image from 'next/image';
-import { Truck, ShieldCheck, Leaf } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight, BookOpenText, Truck, ShieldCheck, Leaf } from 'lucide-react';
 import { client } from '@/sanity/lib/client';
 import { productsQuery } from '@/sanity/lib/queries';
 import { SeoProduct } from '@/lib/seo';
@@ -101,6 +103,49 @@ export default async function Home() {
             {products.map((product) => (
               <ProductCard key={product.id || product._id} product={product} />
             ))}
+          </div>
+        </section>
+
+        {/* BUYING GUIDES SECTION */}
+        <section className="pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl bg-neutral-900 text-white px-6 py-12 md:px-10 shadow-2xl">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
+              <div>
+                <div className="inline-flex items-center gap-2 text-brand-gold font-semibold uppercase tracking-[0.2em] text-xs mb-4">
+                  <BookOpenText size={18} />
+                  Dry Fruits Guides
+                </div>
+                <h2 className="text-3xl md:text-4xl font-serif font-bold mb-3">
+                  Buy with better context
+                </h2>
+                <p className="text-neutral-300 max-w-2xl leading-relaxed">
+                  Use our Bangalore buying guides to compare freshness, pricing, delivery, and product quality before you choose.
+                </p>
+              </div>
+              <Link href="/blog" className="inline-flex items-center gap-2 text-brand-gold hover:text-white font-semibold transition-colors">
+                View all guides <ArrowRight size={18} />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {BLOG_GUIDES.map((guide) => (
+                <Link
+                  key={guide.slug}
+                  href={guide.href}
+                  className="group rounded-2xl border border-white/10 bg-white/5 p-5 hover:border-brand-gold/60 hover:bg-white/10 transition-colors"
+                >
+                  <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-brand-gold transition-colors">
+                    {guide.title}
+                  </h3>
+                  <p className="text-sm text-neutral-300 leading-6 mb-5">
+                    {guide.description}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-brand-gold">
+                    Read guide <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
       </main>
