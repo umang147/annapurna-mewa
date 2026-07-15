@@ -1,8 +1,16 @@
 const DEFAULT_SITE_URL = 'https://annapurnamewa.com';
 
-export const siteUrl = (
-  process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL
-).replace(/\/$/, '');
+function getCanonicalSiteUrl() {
+  const configuredUrl = (process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL).replace(/\/$/, '');
+
+  if (/^https:\/\/annapurna-mewa\.vercel\.app\/?$/i.test(configuredUrl)) {
+    return DEFAULT_SITE_URL;
+  }
+
+  return configuredUrl;
+}
+
+export const siteUrl = getCanonicalSiteUrl();
 
 export const brandName = 'Annapurna Mewa';
 export const defaultSeoDescription =

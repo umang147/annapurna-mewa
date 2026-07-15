@@ -5,6 +5,8 @@ import { client } from '@/sanity/lib/client';
 import { blogPostsQuery, productsQuery } from '@/sanity/lib/queries';
 import { isValidBlogSlug, isValidProductSlug, SeoBlogPost, SeoProduct, siteUrl } from '@/lib/seo';
 
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const hasSanityConfig = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'yoursanityprojectid';
   let products: SeoProduct[] = [];
