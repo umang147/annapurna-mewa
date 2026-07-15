@@ -23,6 +23,7 @@ import {
   getBlogPostUrl,
   isValidBlogSlug,
   jsonLdStringify,
+  ProductPriceOption,
   SeoBlogPost,
 } from '@/lib/seo';
 
@@ -120,7 +121,7 @@ export async function generateMetadata(
 }
 
 function getBlockText(block: NonNullable<SeoBlogPost['body']>[number]) {
-  if (block._type === 'comparisonTable') {
+  if (block._type !== 'block') {
     return block.title || '';
   }
 
@@ -141,6 +142,26 @@ function formatDate(date: string) {
     month: 'long',
     year: 'numeric',
   }).format(new Date(date));
+}
+
+function formatPrice(price: number) {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(price);
+}
+
+function formatPriceOptions(prices?: ProductPriceOption[]) {
+  const validPrices = prices?.filter((price) => price.weight && typeof price.price === 'number') || [];
+
+  if (validPrices.length === 0) {
+    return 'Ask for current price';
+  }
+
+  return validPrices
+    .map((price) => `${price.weight}: ${formatPrice(price.price as number)}`)
+    .join(' / ');
 }
 
 function BlogBody({ post }: { post: SeoBlogPost }) {
@@ -171,6 +192,53 @@ function BlogBody({ post }: { post: SeoBlogPost }) {
                     <div className="text-foreground/60">{row.note}</div>
                   </div>
                 ))}
+              </div>
+            </div>
+          );
+        }
+
+        if (block._type === 'productPriceTable') {
+          return (
+            <div key={block._key || `price-table-${index}`} className="my-10 overflow-hidden rounded-2xl border border-brand-gold/30 bg-white/60">
+              <div className="px-5 py-4 border-b border-foreground/10">
+                <h2 className="text-xl font-serif font-bold text-foreground">
+                  {block.title || 'Current Annapurna Mewa prices'}
+                </h2>
+                <p className="mt-2 text-sm text-foreground/60 leading-6">
+                  {block.intro || 'Prices are pulled from the current product catalog and may change with market rates and availability.'}
+                </p>
+              </div>
+              <div className="divide-y divide-foreground/10">
+                {block.products?.map((item, itemIndex) => {
+                  const product = item.product;
+
+                  if (!product?.slug) {
+                    return null;
+                  }
+
+                  return (
+                    <Link
+                      key={item._key || product._id || `${product.slug}-${itemIndex}`}
+                      href={`/product/${product.slug}`}
+                      className="grid grid-cols-1 gap-3 p-5 transition-colors hover:bg-brand-gold/10 md:grid-cols-[1.1fr_1.4fr]"
+                    >
+                      <div>
+                        <h3 className="font-bold text-foreground">
+                          {item.label || product.name}
+                        </h3>
+                        {product.category && (
+                          <p className="text-sm text-foreground/50">{product.category}</p>
+                        )}
+                        {item.note && (
+                          <p className="mt-2 text-sm text-foreground/60 leading-6">{item.note}</p>
+                        )}
+                      </div>
+                      <div className="text-sm font-semibold text-foreground/80 md:text-right">
+                        {formatPriceOptions(product.prices)}
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           );
@@ -492,6 +560,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         <div>
                           <h3 className="font-bold text-foreground">{product.name}</h3>
                           {product.category && <p className="text-sm text-foreground/50">{product.category}</p>}
+                          {product.prices && product.prices.length > 0 && (
+                            <p className="mt-1 text-sm text-foreground/60">{formatPriceOptions(product.prices)}</p>
+                          )}
                         </div>
                         <span className="text-brand-red font-semibold text-sm">View</span>
                       </Link>

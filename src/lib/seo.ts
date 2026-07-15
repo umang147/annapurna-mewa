@@ -68,6 +68,7 @@ export type BlogRelatedProduct = {
   slug: string;
   category?: string;
   imagePath?: string;
+  prices?: ProductPriceOption[];
 };
 
 export type BlogTableRow = {
@@ -83,6 +84,21 @@ export type BlogComparisonTable = {
   rows?: BlogTableRow[];
 };
 
+export type BlogProductPriceTableItem = {
+  _key?: string;
+  label?: string;
+  note?: string;
+  product?: BlogRelatedProduct;
+};
+
+export type BlogProductPriceTable = {
+  _key?: string;
+  _type: 'productPriceTable';
+  title?: string;
+  intro?: string;
+  products?: BlogProductPriceTableItem[];
+};
+
 export type BlogCta = {
   title?: string;
   text?: string;
@@ -90,7 +106,7 @@ export type BlogCta = {
   href?: string;
 };
 
-export type BlogBodyItem = BlogBlock | BlogComparisonTable;
+export type BlogBodyItem = BlogBlock | BlogComparisonTable | BlogProductPriceTable;
 
 export type SeoBlogPost = {
   _id?: string;
@@ -178,6 +194,14 @@ export function estimateReadingTime(post: SeoBlogPost): number {
     ?.flatMap((block) => {
       if (block._type === 'comparisonTable') {
         return block.rows?.flatMap((row) => [row.label, row.value, row.note]) || [];
+      }
+
+      if (block._type === 'productPriceTable') {
+        return [
+          block.title,
+          block.intro,
+          ...(block.products?.flatMap((item) => [item.label, item.note, item.product?.name]) || []),
+        ];
       }
 
       return block.children?.map((child) => child.text || '') || [];

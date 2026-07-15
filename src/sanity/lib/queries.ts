@@ -76,7 +76,23 @@ export const blogPostBySlugQuery = groq`*[_type == "blogPost" && slug.current ==
   coverImageAlt,
   noIndex,
   "imagePath": coverImage.asset->url,
-  body,
+  body[]{
+    ...,
+    _type == "productPriceTable" => {
+      ...,
+      products[]{
+        ...,
+        product->{
+          _id,
+          name,
+          "slug": slug.current,
+          category,
+          prices,
+          "imagePath": coalesce(image.asset->url, images[0].asset->url)
+        }
+      }
+    }
+  },
   faqs,
   relatedCategories,
   relatedProducts[]->{
@@ -84,7 +100,8 @@ export const blogPostBySlugQuery = groq`*[_type == "blogPost" && slug.current ==
     name,
     "slug": slug.current,
     category,
-    "imagePath": images[0].asset->url
+    prices,
+    "imagePath": coalesce(image.asset->url, images[0].asset->url)
   },
   cta
 }`;

@@ -262,6 +262,80 @@ export const blogPostType = defineType({
             }),
           ],
         },
+        {
+          type: 'object',
+          name: 'productPriceTable',
+          title: 'Live Product Price Table',
+          fields: [
+            defineField({
+              name: 'title',
+              title: 'Table Title',
+              type: 'string',
+              initialValue: 'Current Annapurna Mewa prices',
+            }),
+            defineField({
+              name: 'intro',
+              title: 'Intro Note',
+              type: 'text',
+              rows: 2,
+              description: 'Optional note shown above the table. Use this to explain that prices can change.',
+            }),
+            defineField({
+              name: 'products',
+              title: 'Products',
+              type: 'array',
+              description: 'Select live product documents. Prices are pulled from each product at render time.',
+              of: [
+                {
+                  type: 'object',
+                  fields: [
+                    defineField({
+                      name: 'product',
+                      title: 'Product',
+                      type: 'reference',
+                      to: [{ type: 'product' }],
+                      validation: (rule) => rule.required(),
+                    }),
+                    defineField({
+                      name: 'label',
+                      title: 'Display Label',
+                      type: 'string',
+                      description: 'Optional. Defaults to the product name.',
+                    }),
+                    defineField({
+                      name: 'note',
+                      title: 'Note',
+                      type: 'string',
+                      description: 'Optional use case, freshness note, or buying guidance.',
+                    }),
+                  ],
+                  preview: {
+                    select: {
+                      title: 'label',
+                      productTitle: 'product.name',
+                      subtitle: 'note',
+                    },
+                    prepare: ({ title, productTitle, subtitle }) => ({
+                      title: title || productTitle || 'Product price row',
+                      subtitle,
+                    }),
+                  },
+                },
+              ],
+              validation: (rule) => rule.min(1),
+            }),
+          ],
+          preview: {
+            select: {
+              title: 'title',
+              products: 'products',
+            },
+            prepare: ({ title, products }) => ({
+              title: title || 'Live Product Price Table',
+              subtitle: `${products?.length || 0} products`,
+            }),
+          },
+        },
       ],
       validation: (rule) => rule.required(),
     }),
