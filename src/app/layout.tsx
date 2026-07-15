@@ -38,13 +38,6 @@ export const metadata: Metadata = {
     description: defaultSeoDescription,
     images: ['/images/hero.png'],
   },
-  icons: {
-    icon: [
-      { url: '/icon.png', type: 'image/png' },
-      { url: '/favicon.ico' },
-    ],
-    apple: '/icon.png',
-  }
 };
 
 export default function RootLayout({
