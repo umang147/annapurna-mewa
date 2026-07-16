@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { MOCK_PRODUCTS } from '@/data/mockProducts';
 import { FALLBACK_BLOG_POSTS } from '@/data/blogPosts';
+import { SEO_HUBS } from '@/data/seoHubs';
 import { client } from '@/sanity/lib/client';
 import { blogPostsQuery, productsQuery } from '@/sanity/lib/queries';
 import { isValidBlogSlug, isValidProductSlug, SeoBlogPost, SeoProduct, siteUrl } from '@/lib/seo';
@@ -50,6 +51,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })),
   ];
 
+  const hubUrls = SEO_HUBS.map((hub) => ({
+    url: `${siteUrl}${hub.href}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.85,
+  }));
+
   return [
     {
       url: siteUrl,
@@ -57,6 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 1,
     },
+    ...hubUrls,
     ...productUrls,
     ...blogUrls,
   ];

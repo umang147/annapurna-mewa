@@ -2,6 +2,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { BLOG_GUIDES } from '@/data/internalLinks';
+import { SEO_HUBS } from '@/data/seoHubs';
 import { MOCK_PRODUCTS } from '@/data/mockProducts';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -42,7 +43,7 @@ export default async function Home() {
               Nature&apos;s Finest, <br/><span className="text-brand-gold italic">Handpicked for You.</span>
             </h1>
             <p className="text-xl md:text-2xl text-neutral-200 mb-10 font-light drop-shadow-sm">
-              Above-average quality dry fruits for your daily health. 
+              Premium quality dry fruits for your daily health. 
               <br className="hidden md:block"/> Authentic. Premium. Delicious.
             </p>
             <a 
@@ -145,6 +146,23 @@ export default async function Home() {
                   </span>
                 </Link>
               ))}
+            </div>
+
+            <div className="mt-8 border-t border-white/10 pt-6">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-neutral-400 mb-4">
+                Popular searches
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {SEO_HUBS.map((hub) => (
+                  <Link
+                    key={hub.slug}
+                    href={hub.href}
+                    className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-neutral-200 hover:bg-brand-gold hover:text-neutral-900 transition-colors"
+                  >
+                    {hub.title}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </section>

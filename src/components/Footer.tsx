@@ -1,6 +1,7 @@
 import { Phone, Mail, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { SEO_HUBS } from '@/data/seoHubs';
 
 export default function Footer() {
   return (
@@ -22,7 +23,7 @@ export default function Footer() {
              </span>
           </div>
           <p className="text-sm leading-relaxed mb-4">
-            Providing Bangalore and the whole of India with above-average quality dry fruits for healthy, premium daily consumption.
+            Providing Bangalore and the whole of India with premium quality dry fruits for healthy daily consumption and gifting.
           </p>
         </div>
 
@@ -32,6 +33,9 @@ export default function Footer() {
             <li><Link href="/" className="hover:text-brand-gold transition-colors">Home</Link></li>
             <li><Link href="/#products" className="hover:text-brand-gold transition-colors">Products</Link></li>
             <li><Link href="/blog" className="hover:text-brand-gold transition-colors">Blog</Link></li>
+            <li><Link href={SEO_HUBS[0].href} className="hover:text-brand-gold transition-colors">{SEO_HUBS[0].title}</Link></li>
+            <li><Link href={SEO_HUBS[1].href} className="hover:text-brand-gold transition-colors">{SEO_HUBS[1].title}</Link></li>
+            <li><Link href={SEO_HUBS[2].href} className="hover:text-brand-gold transition-colors">{SEO_HUBS[2].title}</Link></li>
             <li><Link href="/blog/dry-fruits-in-bangalore" className="hover:text-brand-gold transition-colors">Dry Fruits in Bangalore</Link></li>
             <li><Link href="/blog/dry-fruits-price-in-bangalore" className="hover:text-brand-gold transition-colors">Dry Fruits Price Guide</Link></li>
             <li>
@@ -70,6 +74,10 @@ export default function Footer() {
             </li>
           </ul>
           <p className="mt-4 text-xs font-semibold text-brand-gold">Contact Person: Shikha Singhania</p>
+          <div className="mt-4 space-y-1 text-xs text-neutral-400">
+            <p>GST No.: 20ABSPA3006B1ZN</p>
+            <p>FSSAI No.: 11121017000105</p>
+          </div>
         </div>
       </div>
       <div className="text-center mt-12 pt-8 border-t border-neutral-800 text-xs">

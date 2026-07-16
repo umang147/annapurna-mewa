@@ -357,6 +357,19 @@ export function buildLocalBusinessJsonLd() {
     description: defaultSeoDescription,
     telephone: '+917259496740',
     email: 'shikhasinghania56.ss@gmail.com',
+    taxID: '20ABSPA3006B1ZN',
+    identifier: [
+      {
+        '@type': 'PropertyValue',
+        name: 'GST No.',
+        value: '20ABSPA3006B1ZN',
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'FSSAI No.',
+        value: '11121017000105',
+      },
+    ],
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Bangalore',
