@@ -34,12 +34,13 @@ export default async function Home() {
               fill 
               priority
               sizes="100vw"
+              quality={60}
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-black/40 to-transparent"></div>
           </div>
           
-          <div className="relative z-10 text-center px-4 max-w-4xl animate-fade-in-up">
+          <div className="relative z-10 text-center px-4 max-w-4xl">
             <h1 className="text-5xl md:text-7xl font-serif font-bold text-white mb-6 drop-shadow-md">
               Nature&apos;s Finest, <br/><span className="text-brand-gold italic">Handpicked for You.</span>
             </h1>
