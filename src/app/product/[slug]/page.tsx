@@ -108,7 +108,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   const validImagePaths = (product.imagePaths || []).filter(Boolean);
   const firstImage = validImagePaths[0] || product.imagePath;
-  const imageSource = firstImage?.includes('placeholder') || !firstImage ? '/images/hero.png' : firstImage;
+  const imageSource = firstImage?.includes('placeholder') || !firstImage ? '/images/hero-optimized.jpg' : firstImage;
   const imagesToRender = validImagePaths.length > 0 ? validImagePaths : [imageSource];
   const productJsonLd = buildProductJsonLd(product);
   const relatedGuides = getRelatedBlogGuides({

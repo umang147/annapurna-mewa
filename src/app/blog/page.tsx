@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: absoluteUrl('/images/hero.png'),
+        url: absoluteUrl('/images/hero-optimized.jpg'),
         width: 1200,
         height: 630,
         alt: `${brandName} dry fruits guide`,
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `Dry Fruits Guide & Blog | ${brandName}`,
     description: defaultSeoDescription,
-    images: [absoluteUrl('/images/hero.png')],
+    images: [absoluteUrl('/images/hero-optimized.jpg')],
   },
 };
 
@@ -82,10 +82,11 @@ export default async function BlogPage() {
         <section className="relative overflow-hidden bg-neutral-900 text-white py-20 px-4 sm:px-6 lg:px-8">
           <div className="absolute inset-0 opacity-20">
             <Image
-              src="/images/hero.png"
+              src="/images/hero-optimized.jpg"
               alt="Premium dry fruits"
               fill
               className="object-cover"
+              sizes="100vw"
               priority
             />
           </div>
@@ -122,6 +123,7 @@ export default async function BlogPage() {
                       src={getBlogPostImageSource(post)}
                       alt={post.title}
                       fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     {post.category && (

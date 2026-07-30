@@ -58,7 +58,7 @@ export async function generateMetadata(
       type: 'website',
       images: [
         {
-          url: absoluteUrl('/images/hero.png'),
+          url: absoluteUrl('/images/hero-optimized.jpg'),
           width: 1200,
           height: 630,
           alt: hub.title,
@@ -69,7 +69,7 @@ export async function generateMetadata(
       card: 'summary_large_image',
       title: hub.metaTitle,
       description: hub.metaDescription,
-      images: [absoluteUrl('/images/hero.png')],
+      images: [absoluteUrl('/images/hero-optimized.jpg')],
     },
   };
 }

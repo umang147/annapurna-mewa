@@ -6,7 +6,7 @@ import TrackedLink from './TrackedLink';
 export default function ProductCard({ product }: { product: SeoProduct }) {
   // Using the hero image as placeholder if specific not found
   const firstImage = product.imagePaths?.[0] || product.imagePath; // Support old seeded data
-  const imageSource = firstImage?.includes('placeholder') || !firstImage ? '/images/hero.png' : firstImage;
+  const imageSource = firstImage?.includes('placeholder') || !firstImage ? '/images/hero-optimized.jpg' : firstImage;
 
   return (
     <TrackedLink
@@ -26,6 +26,7 @@ export default function ProductCard({ product }: { product: SeoProduct }) {
             src={imageSource}
             alt={product.name}
             fill
+            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold tracking-wider text-brand-gold">

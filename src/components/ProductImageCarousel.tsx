@@ -79,6 +79,7 @@ export default function ProductImageCarousel({ images, productName, category }: 
             src={src}
             alt={`${productName} image ${(i % images.length) + 1}`}
             fill
+            sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover"
             priority={i === 0}
           />

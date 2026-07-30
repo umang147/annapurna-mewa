@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     siteName: 'Annapurna Mewa',
     images: [
       {
-        url: '/images/hero.png',
+        url: '/images/hero-optimized.jpg',
         width: 1200,
         height: 630,
         alt: 'Premium dry fruits from Annapurna Mewa',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Annapurna Mewa | Premium Dry Fruits in Bangalore',
     description: defaultSeoDescription,
-    images: ['/images/hero.png'],
+    images: ['/images/hero-optimized.jpg'],
   },
 };
 
@@ -56,7 +56,7 @@ export default function RootLayout({
         />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-M66KP56TTK"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         <Script id="google-analytics" strategy="afterInteractive">
           {`

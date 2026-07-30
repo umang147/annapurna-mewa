@@ -29,10 +29,11 @@ export default async function Home() {
         <section className="relative h-[80vh] w-full flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image 
-              src="/images/hero.png" 
+              src="/images/hero-optimized.jpg" 
               alt="Premium Dry Fruits Assortment" 
               fill 
               priority
+              sizes="100vw"
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-black/40 to-transparent"></div>

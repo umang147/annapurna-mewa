@@ -16,6 +16,7 @@ export default function Footer() {
                  src="/logo.png" 
                  alt="Annapurna Mewa Logo" 
                  fill 
+                 sizes="48px"
                  className="object-contain p-1"
                />
              </div>

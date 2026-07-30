@@ -29,7 +29,7 @@ export const FALLBACK_BLOG_POSTS: SeoBlogPost[] = [
       'Annapurna Mewa helps Bangalore customers choose premium dry fruits for daily snacking, gifting, cooking, and family nutrition.',
     category: 'Dry Fruits Guide',
     noIndex: true,
-    imagePath: '/images/hero.png',
+    imagePath: '/images/hero-optimized.jpg',
     coverImageAlt: 'Premium dry fruits assortment from Annapurna Mewa',
     relatedCategories: ['Almonds', 'Cashews', 'Pistachios', 'Raisins', 'Makhana'],
     body: [

@@ -178,11 +178,11 @@ export function getBlogPostDescription(post: SeoBlogPost): string {
 }
 
 export function getBlogPostImage(post: SeoBlogPost): string {
-  return absoluteUrl(post.imagePath || '/images/hero.png');
+  return absoluteUrl(post.imagePath || '/images/hero-optimized.jpg');
 }
 
 export function getBlogPostImageSource(post: SeoBlogPost): string {
-  return post.imagePath || '/images/hero.png';
+  return post.imagePath || '/images/hero-optimized.jpg';
 }
 
 export function isValidBlogSlug(slug: unknown): slug is string {
@@ -304,7 +304,7 @@ export function getProductImages(product: SeoProduct): string[] {
 
   const usableImages = images.filter((image) => !image.includes('placeholder'));
 
-  return (usableImages.length > 0 ? usableImages : ['/images/hero.png']).map(absoluteUrl);
+  return (usableImages.length > 0 ? usableImages : ['/images/hero-optimized.jpg']).map(absoluteUrl);
 }
 
 export function getProductUrl(product: SeoProduct): string {
@@ -353,7 +353,7 @@ export function buildLocalBusinessJsonLd() {
     name: brandName,
     url: siteUrl,
     logo: absoluteUrl('/logo.png'),
-    image: absoluteUrl('/images/hero.png'),
+    image: absoluteUrl('/images/hero-optimized.jpg'),
     description: defaultSeoDescription,
     telephone: '+917259496740',
     email: 'shikhasinghania56.ss@gmail.com',
