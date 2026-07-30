@@ -32,7 +32,7 @@ export default async function Home() {
               src="/images/hero-optimized.jpg" 
               alt="Premium Dry Fruits Assortment" 
               fill 
-              priority
+              preload
               sizes="100vw"
               quality={60}
               className="object-cover"
