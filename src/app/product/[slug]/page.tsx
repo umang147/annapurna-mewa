@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { client } from '@/sanity/lib/client';
 import { productBySlugQuery } from '@/sanity/lib/queries';
 import ProductImageCarousel from '@/components/ProductImageCarousel';
+import TrackedLink from '@/components/TrackedLink';
 import {
   buildProductJsonLd,
   getProductDescription,
@@ -164,15 +165,22 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </div>
 
             <div className="space-y-4 mt-auto">
-               <a 
+               <TrackedLink
                  href={whatsappLink} 
+                 eventName="whatsapp_inquiry_click"
+                 eventParams={{
+                   product_slug: product.slug,
+                   product_name: product.name,
+                   product_category: product.category || '',
+                   location: 'product_page_primary_cta',
+                 }}
                  target="_blank" 
                  rel="noopener noreferrer"
                  className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-4 px-6 rounded-2xl flex justify-center items-center gap-3 transition-transform hover:scale-105 shadow-lg shadow-[#25D366]/30"
                >
                  <MessageCircle size={24} />
                  Inquire via WhatsApp
-               </a>
+               </TrackedLink>
                <p className="text-xs text-center text-foreground/50 font-medium">
                  Connect directly with Shikha. Easy query and order process.
                </p>

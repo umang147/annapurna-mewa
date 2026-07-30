@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, CalendarDays } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import TrackedLink from '@/components/TrackedLink';
 import { FALLBACK_BLOG_POSTS } from '@/data/blogPosts';
 import { client } from '@/sanity/lib/client';
 import { blogPostsQuery } from '@/sanity/lib/queries';
@@ -104,7 +105,17 @@ export default async function BlogPage() {
         <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {posts.map((post) => (
-              <Link key={post._id || post.slug} href={getBlogPostUrl(post).replace(absoluteUrl('/'), '/')} className="block group h-full">
+              <TrackedLink
+                key={post._id || post.slug}
+                href={getBlogPostUrl(post).replace(absoluteUrl('/'), '/')}
+                eventName="blog_card_click"
+                eventParams={{
+                  blog_slug: post.slug,
+                  blog_title: post.title,
+                  location: 'blog_index',
+                }}
+                className="block group h-full"
+              >
                 <article className="glass rounded-2xl overflow-hidden hover-glow h-full flex flex-col">
                   <div className="relative aspect-[4/3] bg-neutral-900">
                     <Image
@@ -136,7 +147,7 @@ export default async function BlogPage() {
                     </div>
                   </div>
                 </article>
-              </Link>
+              </TrackedLink>
             ))}
           </div>
         </section>

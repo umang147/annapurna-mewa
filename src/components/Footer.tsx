@@ -2,6 +2,7 @@ import { Phone, Mail, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SEO_HUBS } from '@/data/seoHubs';
+import TrackedLink from './TrackedLink';
 
 export default function Footer() {
   return (
@@ -39,14 +40,19 @@ export default function Footer() {
             <li><Link href="/blog/dry-fruits-in-bangalore" className="hover:text-brand-gold transition-colors">Dry Fruits in Bangalore</Link></li>
             <li><Link href="/blog/dry-fruits-price-in-bangalore" className="hover:text-brand-gold transition-colors">Dry Fruits Price Guide</Link></li>
             <li>
-              <a 
+              <TrackedLink
                 href="https://chat.whatsapp.com/BqA4cJRFfP0K5Cg6hzb5tl" 
+                eventName="whatsapp_group_click"
+                eventParams={{
+                  location: 'footer',
+                  link_text: 'Join WhatsApp Group',
+                }}
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-[#25D366] hover:text-[#20bd5a] font-medium transition-colors"
               >
                 Join WhatsApp Group
-              </a>
+              </TrackedLink>
             </li>
           </ul>
         </div>

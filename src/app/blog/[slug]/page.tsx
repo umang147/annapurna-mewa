@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { CalendarDays, ChevronLeft, Clock, HelpCircle, Lightbulb, ShoppingBag } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import TrackedLink from '@/components/TrackedLink';
 import { FALLBACK_BLOG_POSTS } from '@/data/blogPosts';
 import { getRelatedBlogGuides } from '@/data/internalLinks';
 import { client } from '@/sanity/lib/client';
@@ -218,9 +219,17 @@ function BlogBody({ post }: { post: SeoBlogPost }) {
                   }
 
                   return (
-                    <Link
+                    <TrackedLink
                       key={item._key || product._id || `${product.slug}-${itemIndex}`}
                       href={`/product/${product.slug}`}
+                      eventName="blog_product_click"
+                      eventParams={{
+                        blog_slug: post.slug,
+                        product_slug: product.slug,
+                        product_name: product.name,
+                        product_category: product.category || '',
+                        location: 'blog_live_price_table',
+                      }}
                       className="grid grid-cols-1 gap-3 p-5 transition-colors hover:bg-brand-gold/10 md:grid-cols-[1.1fr_1.4fr]"
                     >
                       <div>
@@ -237,7 +246,7 @@ function BlogBody({ post }: { post: SeoBlogPost }) {
                       <div className="text-sm font-semibold text-foreground/80 md:text-right">
                         {formatPriceOptions(product.prices)}
                       </div>
-                    </Link>
+                    </TrackedLink>
                   );
                 })}
               </div>
@@ -557,9 +566,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   </div>
                   <div className="grid gap-3">
                     {post.relatedProducts.map((product) => (
-                      <Link
+                      <TrackedLink
                         key={product._id || product.slug}
                         href={`/product/${product.slug}`}
+                        eventName="blog_product_click"
+                        eventParams={{
+                          blog_slug: post.slug,
+                          product_slug: product.slug,
+                          product_name: product.name,
+                          product_category: product.category || '',
+                          location: 'blog_related_products',
+                        }}
                         className="flex items-center justify-between gap-4 rounded-2xl bg-white/50 border border-foreground/10 p-4 hover:border-brand-gold/50 transition-colors"
                       >
                         <div>
@@ -570,7 +587,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                           )}
                         </div>
                         <span className="text-brand-red font-semibold text-sm">View</span>
-                      </Link>
+                      </TrackedLink>
                     ))}
                   </div>
                 </section>
@@ -606,21 +623,33 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   {post.cta?.text || 'Browse almonds, cashews, pistachios, raisins, makhana, walnuts, figs, and more from Annapurna Mewa.'}
                 </p>
                 {post.cta?.href?.startsWith('http') ? (
-                  <a
+                  <TrackedLink
                     href={post.cta.href}
+                    eventName={post.cta.href.includes('wa.me') || post.cta.href.includes('whatsapp.com') ? 'whatsapp_inquiry_click' : 'cta_click'}
+                    eventParams={{
+                      blog_slug: post.slug,
+                      cta_label: post.cta.label || 'Ask on WhatsApp',
+                      location: 'blog_bottom_cta',
+                    }}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center bg-brand-red hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-full transition-colors"
                   >
                     {post.cta.label || 'Ask on WhatsApp'}
-                  </a>
+                  </TrackedLink>
                 ) : (
-                  <Link
+                  <TrackedLink
                     href={post.cta?.href || '/#products'}
+                    eventName="cta_click"
+                    eventParams={{
+                      blog_slug: post.slug,
+                      cta_label: post.cta?.label || 'View Catalog',
+                      location: 'blog_bottom_cta',
+                    }}
                     className="inline-flex items-center justify-center bg-brand-red hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-full transition-colors"
                   >
                     {post.cta?.label || 'View Catalog'}
-                  </Link>
+                  </TrackedLink>
                 )}
               </div>
             </div>

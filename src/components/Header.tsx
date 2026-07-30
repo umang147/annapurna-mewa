@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Leaf } from 'lucide-react';
+import TrackedLink from './TrackedLink';
 
 export default function Header() {
   return (
@@ -24,14 +25,19 @@ export default function Header() {
           <Link href="/#products" className="hover:text-brand-red transition-colors">Shop Catalog</Link>
           <Link href="/blog" className="hover:text-brand-red transition-colors">Blog</Link>
           <Link href="/#contact" className="hover:text-brand-red transition-colors">Contact</Link>
-          <a 
+          <TrackedLink
             href="https://chat.whatsapp.com/BqA4cJRFfP0K5Cg6hzb5tl" 
+            eventName="whatsapp_group_click"
+            eventParams={{
+              location: 'header',
+              link_text: 'Join WhatsApp',
+            }}
             target="_blank" 
             rel="noopener noreferrer"
             className="bg-[#25D366] hover:bg-[#20bd5a] text-white px-4 py-2 rounded-full font-bold transition-colors shadow-sm flex items-center gap-2"
           >
             Join WhatsApp
-          </a>
+          </TrackedLink>
         </nav>
         <div className="md:hidden">
            {/* Mobile menu could go here */}

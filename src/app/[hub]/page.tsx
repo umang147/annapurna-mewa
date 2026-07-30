@@ -5,6 +5,7 @@ import { ArrowRight, CheckCircle2, ChevronLeft, HelpCircle, MessageCircle, Shopp
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
+import TrackedLink from '@/components/TrackedLink';
 import { MOCK_PRODUCTS } from '@/data/mockProducts';
 import { BLOG_GUIDES } from '@/data/internalLinks';
 import { getRelatedSeoHubs, getSeoHub, SEO_HUBS } from '@/data/seoHubs';
@@ -209,21 +210,34 @@ export default async function SeoHubPage({ params }: { params: Promise<{ hub: st
                   {hub.heroText}
                 </p>
                 <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                  <a
+                  <TrackedLink
                     href={whatsappLink}
+                    eventName="whatsapp_inquiry_click"
+                    eventParams={{
+                      hub_slug: hub.slug,
+                      hub_title: hub.title,
+                      location: 'seo_hub_hero_cta',
+                    }}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-4 px-6 rounded-full transition-colors"
                   >
                     <MessageCircle size={20} />
                     Ask on WhatsApp
-                  </a>
-                  <a
+                  </TrackedLink>
+                  <TrackedLink
                     href="#products"
+                    eventName="cta_click"
+                    eventParams={{
+                      hub_slug: hub.slug,
+                      hub_title: hub.title,
+                      cta_label: 'View products',
+                      location: 'seo_hub_hero_secondary',
+                    }}
                     className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white font-bold py-4 px-6 rounded-full border border-white/15 transition-colors"
                   >
                     View products <ArrowRight size={20} />
-                  </a>
+                  </TrackedLink>
                 </div>
               </div>
               <div className="rounded-3xl border border-white/10 bg-white/10 p-6 md:p-8 backdrop-blur-md">
@@ -272,9 +286,17 @@ export default async function SeoHubPage({ params }: { params: Promise<{ hub: st
             </div>
             <div className="divide-y divide-foreground/10">
               {hubProducts.slice(0, 6).map((product) => (
-                <Link
+                <TrackedLink
                   key={`price-${product.id || product._id || product.slug}`}
                   href={`/product/${product.slug}`}
+                  eventName="product_click"
+                  eventParams={{
+                    product_slug: product.slug,
+                    product_name: product.name,
+                    product_category: product.category || '',
+                    hub_slug: hub.slug,
+                    location: 'seo_hub_price_reference',
+                  }}
                   className="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr_0.5fr] gap-2 p-5 hover:bg-brand-gold/10 transition-colors"
                 >
                   <div>
@@ -283,7 +305,7 @@ export default async function SeoHubPage({ params }: { params: Promise<{ hub: st
                   </div>
                   <div className="font-semibold text-foreground/80">{formatPriceRange(product)}</div>
                   <div className="text-brand-red font-semibold md:text-right">View</div>
-                </Link>
+                </TrackedLink>
               ))}
             </div>
           </div>
@@ -370,15 +392,21 @@ export default async function SeoHubPage({ params }: { params: Promise<{ hub: st
           <div className="rounded-3xl bg-neutral-900 text-white p-8 md:p-10 text-center">
             <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">{hub.ctaTitle}</h2>
             <p className="text-neutral-300 max-w-2xl mx-auto leading-relaxed mb-8">{hub.ctaText}</p>
-            <a
+            <TrackedLink
               href={whatsappLink}
+              eventName="whatsapp_inquiry_click"
+              eventParams={{
+                hub_slug: hub.slug,
+                hub_title: hub.title,
+                location: 'seo_hub_bottom_cta',
+              }}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-4 px-7 rounded-full transition-colors"
             >
               <MessageCircle size={20} />
               Ask on WhatsApp
-            </a>
+            </TrackedLink>
           </div>
         </section>
       </main>

@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { ShoppingBag } from 'lucide-react';
 import { SeoProduct } from '@/lib/seo';
+import TrackedLink from './TrackedLink';
 
 export default function ProductCard({ product }: { product: SeoProduct }) {
   // Using the hero image as placeholder if specific not found
@@ -9,7 +9,17 @@ export default function ProductCard({ product }: { product: SeoProduct }) {
   const imageSource = firstImage?.includes('placeholder') || !firstImage ? '/images/hero.png' : firstImage;
 
   return (
-    <Link href={`/product/${product.slug}`} className="block h-full group">
+    <TrackedLink
+      href={`/product/${product.slug}`}
+      eventName="product_click"
+      eventParams={{
+        product_slug: product.slug,
+        product_name: product.name,
+        product_category: product.category,
+        location: 'product_card',
+      }}
+      className="block h-full group"
+    >
       <div className="glass rounded-2xl overflow-hidden hover-glow flex flex-col h-full animate-fade-in-up">
         <div className="relative aspect-square w-full">
           <Image 
@@ -35,6 +45,6 @@ export default function ProductCard({ product }: { product: SeoProduct }) {
           </div>
         </div>
       </div>
-    </Link>
+    </TrackedLink>
   );
 }
