@@ -25,6 +25,7 @@ export default function Header() {
           <Link href="/" className="hover:text-brand-red transition-colors">Home</Link>
           <Link href="/#products" className="hover:text-brand-red transition-colors">Shop Catalog</Link>
           <Link href="/blog" className="hover:text-brand-red transition-colors">Blog</Link>
+          <Link href="/about" className="hover:text-brand-red transition-colors">About</Link>
           <Link href="/#contact" className="hover:text-brand-red transition-colors">Contact</Link>
           <TrackedLink
             href="https://chat.whatsapp.com/BqA4cJRFfP0K5Cg6hzb5tl" 

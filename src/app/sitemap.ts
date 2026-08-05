@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next';
 import { MOCK_PRODUCTS } from '@/data/mockProducts';
 import { FALLBACK_BLOG_POSTS } from '@/data/blogPosts';
 import { SEO_HUBS } from '@/data/seoHubs';
+import { TRUST_PAGE_LINKS } from '@/data/trustPages';
 import { client } from '@/sanity/lib/client';
 import { blogPostsQuery, productsQuery } from '@/sanity/lib/queries';
 import { isValidBlogSlug, isValidProductSlug, SeoBlogPost, SeoProduct, siteUrl } from '@/lib/seo';
@@ -58,6 +59,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }));
 
+  const trustUrls = TRUST_PAGE_LINKS.map((page) => ({
+    url: `${siteUrl}${page.href}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.55,
+  }));
+
   return [
     {
       url: siteUrl,
@@ -66,6 +74,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     ...hubUrls,
+    ...trustUrls,
     ...productUrls,
     ...blogUrls,
   ];

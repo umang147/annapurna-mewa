@@ -316,29 +316,66 @@ export function isValidProductSlug(slug: unknown): slug is string {
 }
 
 export function buildProductJsonLd(product: SeoProduct) {
-  const prices = (product.prices || [])
-    .map((option) => option.price)
-    .filter((price): price is number => typeof price === 'number' && price > 0);
+  const priceOptions = (product.prices || [])
+    .filter((option) => typeof option.price === 'number' && option.price > 0);
+  const prices = priceOptions.map((option) => option.price as number);
   const lowPrice = prices.length > 0 ? Math.min(...prices) : undefined;
   const highPrice = prices.length > 0 ? Math.max(...prices) : undefined;
+  const productUrl = getProductUrl(product);
+  const seller = {
+    '@type': 'Organization',
+    name: brandName,
+    url: siteUrl,
+  };
+  const offers = priceOptions.map((option, index) => ({
+    '@type': 'Offer',
+    name: [product.name, option.weight].filter(Boolean).join(' - '),
+    sku: [product.slug, option.weight || index + 1].join('-').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''),
+    price: option.price,
+    priceCurrency: 'INR',
+    availability: 'https://schema.org/InStock',
+    itemCondition: 'https://schema.org/NewCondition',
+    url: productUrl,
+    seller,
+  }));
 
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
+    sku: product.slug,
     description: getProductDescription(product),
     image: getProductImages(product),
     brand: {
       '@type': 'Brand',
       name: brandName,
     },
+    manufacturer: seller,
     category: product.category || 'Dry Fruits',
-    url: getProductUrl(product),
-    offers: {
+    url: productUrl,
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: 'FSSAI No.',
+        value: '11121017000105',
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'GST No.',
+        value: '20ABSPA3006B1ZN',
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'Order support',
+        value: 'WhatsApp enquiry before ordering',
+      },
+    ],
+    offers: offers.length > 0 ? offers : {
       '@type': 'AggregateOffer',
       priceCurrency: 'INR',
       availability: 'https://schema.org/InStock',
-      url: getProductUrl(product),
+      url: productUrl,
+      seller,
       ...(lowPrice ? { lowPrice } : {}),
       ...(highPrice ? { highPrice } : {}),
       offerCount: prices.length || undefined,
@@ -385,6 +422,25 @@ export function buildLocalBusinessJsonLd() {
         '@type': 'Country',
         name: 'India',
       },
+    ],
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone: '+917259496740',
+        contactType: 'customer support',
+        areaServed: 'IN',
+        availableLanguage: ['en', 'hi'],
+      },
+    ],
+    knowsAbout: [
+      'Premium dry fruits',
+      'Almonds',
+      'Cashews',
+      'Pistachios',
+      'Raisins',
+      'Makhana',
+      'Dry fruit gift boxes',
+      'Dry fruits in Bangalore',
     ],
     sameAs: ['https://chat.whatsapp.com/BqA4cJRFfP0K5Cg6hzb5tl'],
   };

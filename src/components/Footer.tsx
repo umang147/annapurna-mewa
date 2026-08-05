@@ -2,6 +2,7 @@ import { Phone, Mail, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SEO_HUBS } from '@/data/seoHubs';
+import { TRUST_PAGE_LINKS } from '@/data/trustPages';
 import TrackedLink from './TrackedLink';
 
 export default function Footer() {
@@ -35,9 +36,15 @@ export default function Footer() {
             <li><Link href="/" className="hover:text-brand-gold transition-colors">Home</Link></li>
             <li><Link href="/#products" className="hover:text-brand-gold transition-colors">Products</Link></li>
             <li><Link href="/blog" className="hover:text-brand-gold transition-colors">Blog</Link></li>
+            <li><Link href="/about" className="hover:text-brand-gold transition-colors">About Annapurna Mewa</Link></li>
             <li><Link href={SEO_HUBS[0].href} className="hover:text-brand-gold transition-colors">{SEO_HUBS[0].title}</Link></li>
             <li><Link href={SEO_HUBS[1].href} className="hover:text-brand-gold transition-colors">{SEO_HUBS[1].title}</Link></li>
             <li><Link href={SEO_HUBS[2].href} className="hover:text-brand-gold transition-colors">{SEO_HUBS[2].title}</Link></li>
+            {TRUST_PAGE_LINKS.slice(1).map((page) => (
+              <li key={page.href}>
+                <Link href={page.href} className="hover:text-brand-gold transition-colors">{page.title}</Link>
+              </li>
+            ))}
             <li><Link href="/blog/dry-fruits-in-bangalore" className="hover:text-brand-gold transition-colors">Dry Fruits in Bangalore</Link></li>
             <li><Link href="/blog/dry-fruits-price-in-bangalore" className="hover:text-brand-gold transition-colors">Dry Fruits Price Guide</Link></li>
             <li>
