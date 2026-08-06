@@ -39,6 +39,16 @@ function formatWeightLabel(weight: string | undefined): string {
     .trim();
 }
 
+function formatShippingWeight(weight: string): string {
+  const match = weight.match(/^(\d+(?:\.\d+)?)(g|kg)$/i);
+
+  if (!match) {
+    return '';
+  }
+
+  return `${match[1]} ${match[2].toLowerCase()}`;
+}
+
 function getProductFeedItems(product: SeoProduct) {
   const prices = product.prices?.filter((price) => (
     typeof price.price === 'number' && price.price > 0
@@ -53,6 +63,7 @@ function getProductFeedItems(product: SeoProduct) {
     const id = normalizeId([product.slug, weight || index + 1].join('-'));
     const productName = product.name.trim();
     const title = weight ? `${productName} - ${weight}` : productName;
+    const shippingWeight = formatShippingWeight(weight);
 
     return {
       id,
@@ -62,6 +73,7 @@ function getProductFeedItems(product: SeoProduct) {
       productUrl,
       imageLink,
       price: formatPrice(priceOption.price as number),
+      shippingWeight,
       mpn: id,
       productType: ['Dry Fruits', product.category].filter(Boolean).join(' > '),
     };
@@ -97,7 +109,8 @@ ${items.map((item) => `    <item>
       <g:image_link>${escapeXml(item.imageLink)}</g:image_link>
       <g:availability>in_stock</g:availability>
       <g:price>${escapeXml(item.price)}</g:price>
-      <g:brand>${escapeXml(brandName)}</g:brand>
+${item.shippingWeight ? `      <g:shipping_weight>${escapeXml(item.shippingWeight)}</g:shipping_weight>
+` : ''}      <g:brand>${escapeXml(brandName)}</g:brand>
       <g:condition>new</g:condition>
       <g:mpn>${escapeXml(item.mpn)}</g:mpn>
       <g:product_type>${escapeXml(item.productType)}</g:product_type>
