@@ -51,7 +51,7 @@ function formatShippingWeight(weight: string): string {
 
 function getMerchantCenterDescription(product: SeoProduct): string {
   const description = getProductDescription(product);
-  const restrictedHealthClaimPattern = /\b(ailment|antioxidants?|brain function|cholesterol|cure|diabetes|disease|health benefits?|heart health|inflammation|medicine|prevent|treat)\b/i;
+  const restrictedHealthClaimPattern = /\b(ailment|antioxidants?|brain function|calcium|cholesterol|cure|diabetes|disease|fiber|health benefits?|heart health|inflammation|magnesium|medicine|minerals?|nutrients?|nutritious|protein|prevent|treat|vitamin)\b/i;
 
   if (!restrictedHealthClaimPattern.test(description)) {
     return description;
