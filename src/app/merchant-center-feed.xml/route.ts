@@ -33,9 +33,9 @@ function formatWeightLabel(weight: string | undefined): string {
   }
 
   return weight
-    .replace(/\bgr\b/i, 'g')
-    .replace(/\bgms\b/i, 'g')
-    .replace(/\bkg\b/i, 'kg')
+    .replace(/(\d+)\s*gr\b/i, '$1g')
+    .replace(/(\d+)\s*gms\b/i, '$1g')
+    .replace(/(\d+)\s*kg\b/i, '$1kg')
     .trim();
 }
 
@@ -51,7 +51,8 @@ function getProductFeedItems(product: SeoProduct) {
   return prices.map((priceOption, index) => {
     const weight = formatWeightLabel(priceOption.weight);
     const id = normalizeId([product.slug, weight || index + 1].join('-'));
-    const title = weight ? `${product.name} - ${weight}` : product.name;
+    const productName = product.name.trim();
+    const title = weight ? `${productName} - ${weight}` : productName;
 
     return {
       id,
