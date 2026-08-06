@@ -49,6 +49,17 @@ function formatShippingWeight(weight: string): string {
   return `${match[1]} ${match[2].toLowerCase()}`;
 }
 
+function getMerchantCenterDescription(product: SeoProduct): string {
+  const description = getProductDescription(product);
+  const restrictedHealthClaimPattern = /\b(ailment|antioxidants?|brain function|cholesterol|cure|diabetes|disease|health benefits?|heart health|inflammation|medicine|prevent|treat)\b/i;
+
+  if (!restrictedHealthClaimPattern.test(description)) {
+    return description;
+  }
+
+  return `${product.name} from ${brandName}. Premium dry fruit for snacking, cooking, baking, gifting, desserts, and everyday pantry use with delivery in Bangalore and across India.`;
+}
+
 function getProductFeedItems(product: SeoProduct) {
   const prices = product.prices?.filter((price) => (
     typeof price.price === 'number' && price.price > 0
@@ -56,7 +67,7 @@ function getProductFeedItems(product: SeoProduct) {
   const images = getProductImages(product);
   const imageLink = images[0] || absoluteUrl('/images/hero-optimized.jpg');
   const productUrl = getProductUrl(product);
-  const description = getProductDescription(product);
+  const description = getMerchantCenterDescription(product);
 
   return prices.map((priceOption, index) => {
     const weight = formatWeightLabel(priceOption.weight);
