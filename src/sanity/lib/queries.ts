@@ -91,6 +91,13 @@ export const blogPostBySlugQuery = groq`*[_type == "blogPost" && slug.current ==
           "imagePath": coalesce(image.asset->url, images[0].asset->url)
         }
       }
+    },
+    _type == "imageGallery" => {
+      ...,
+      images[]{
+        ...,
+        "imagePath": image.asset->url
+      }
     }
   },
   faqs,

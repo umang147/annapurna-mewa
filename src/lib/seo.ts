@@ -99,6 +99,20 @@ export type BlogProductPriceTable = {
   products?: BlogProductPriceTableItem[];
 };
 
+export type BlogImageGalleryItem = {
+  _key?: string;
+  imagePath?: string;
+  alt?: string;
+  caption?: string;
+};
+
+export type BlogImageGallery = {
+  _key?: string;
+  _type: 'imageGallery';
+  title?: string;
+  images?: BlogImageGalleryItem[];
+};
+
 export type BlogCta = {
   title?: string;
   text?: string;
@@ -106,7 +120,7 @@ export type BlogCta = {
   href?: string;
 };
 
-export type BlogBodyItem = BlogBlock | BlogComparisonTable | BlogProductPriceTable;
+export type BlogBodyItem = BlogBlock | BlogComparisonTable | BlogProductPriceTable | BlogImageGallery;
 
 export type SeoBlogPost = {
   _id?: string;

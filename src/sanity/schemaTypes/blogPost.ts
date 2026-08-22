@@ -336,6 +336,57 @@ export const blogPostType = defineType({
             }),
           },
         },
+        {
+          type: 'object',
+          name: 'imageGallery',
+          title: 'Image Gallery',
+          fields: [
+            defineField({
+              name: 'title',
+              title: 'Gallery Title',
+              type: 'string',
+            }),
+            defineField({
+              name: 'images',
+              title: 'Images',
+              type: 'array',
+              of: [
+                {
+                  type: 'object',
+                  fields: [
+                    defineField({
+                      name: 'image',
+                      title: 'Image',
+                      type: 'image',
+                      options: { hotspot: true },
+                      validation: (rule) => rule.required(),
+                    }),
+                    defineField({
+                      name: 'alt',
+                      title: 'Alt Text',
+                      type: 'string',
+                      validation: (rule) => rule.required().max(140),
+                    }),
+                    defineField({
+                      name: 'caption',
+                      title: 'Caption',
+                      type: 'string',
+                      validation: (rule) => rule.max(180),
+                    }),
+                  ],
+                },
+              ],
+              validation: (rule) => rule.min(1),
+            }),
+          ],
+          preview: {
+            select: { title: 'title', images: 'images' },
+            prepare: ({ title, images }) => ({
+              title: title || 'Image Gallery',
+              subtitle: `${images?.length || 0} images`,
+            }),
+          },
+        },
       ],
       validation: (rule) => rule.required(),
     }),

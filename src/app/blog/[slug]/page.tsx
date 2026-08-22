@@ -178,6 +178,40 @@ function BlogBody({ post }: { post: SeoBlogPost }) {
   return (
     <>
       {post.body.map((block, index) => {
+        if (block._type === 'imageGallery') {
+          const images = block.images?.filter((image) => image.imagePath) || [];
+
+          if (images.length === 0) {
+            return null;
+          }
+
+          return (
+            <section key={block._key || `gallery-${index}`} className="my-10">
+              {block.title && (
+                <h2 className="mb-4 text-2xl font-serif font-bold text-foreground">{block.title}</h2>
+              )}
+              <div className="grid gap-4 sm:grid-cols-2">
+                {images.map((image, imageIndex) => (
+                  <figure key={image._key || `${image.imagePath}-${imageIndex}`} className="overflow-hidden rounded-2xl border border-foreground/10 bg-white/50">
+                    <div className="relative aspect-[4/3]">
+                      <Image
+                        src={image.imagePath as string}
+                        alt={image.alt || ''}
+                        fill
+                        sizes="(min-width: 768px) 340px, 100vw"
+                        className="object-cover"
+                      />
+                    </div>
+                    {image.caption && (
+                      <figcaption className="px-4 py-3 text-sm leading-6 text-foreground/60">{image.caption}</figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+            </section>
+          );
+        }
+
         if (block._type === 'comparisonTable') {
           return (
             <div key={block._key || `table-${index}`} className="my-10 overflow-hidden rounded-2xl border border-foreground/10 bg-white/50">
