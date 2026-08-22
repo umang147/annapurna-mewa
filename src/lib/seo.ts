@@ -102,6 +102,8 @@ export type BlogProductPriceTable = {
 export type BlogImageGalleryItem = {
   _key?: string;
   imagePath?: string;
+  width?: number;
+  height?: number;
   alt?: string;
   caption?: string;
 };

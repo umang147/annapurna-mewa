@@ -96,7 +96,9 @@ export const blogPostBySlugQuery = groq`*[_type == "blogPost" && slug.current ==
       ...,
       images[]{
         ...,
-        "imagePath": image.asset->url
+        "imagePath": image.asset->url,
+        "width": image.asset->metadata.dimensions.width,
+        "height": image.asset->metadata.dimensions.height
       }
     }
   },

@@ -193,15 +193,14 @@ function BlogBody({ post }: { post: SeoBlogPost }) {
               <div className="grid gap-4 sm:grid-cols-2">
                 {images.map((image, imageIndex) => (
                   <figure key={image._key || `${image.imagePath}-${imageIndex}`} className="overflow-hidden rounded-2xl border border-foreground/10 bg-white/50">
-                    <div className="relative aspect-[4/3]">
-                      <Image
-                        src={image.imagePath as string}
-                        alt={image.alt || ''}
-                        fill
-                        sizes="(min-width: 768px) 340px, 100vw"
-                        className="object-cover"
-                      />
-                    </div>
+                    <Image
+                      src={image.imagePath as string}
+                      alt={image.alt || ''}
+                      width={image.width || 1200}
+                      height={image.height || 900}
+                      sizes="(min-width: 768px) 340px, 100vw"
+                      className="h-auto w-full"
+                    />
                     {image.caption && (
                       <figcaption className="px-4 py-3 text-sm leading-6 text-foreground/60">{image.caption}</figcaption>
                     )}
