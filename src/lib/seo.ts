@@ -218,6 +218,13 @@ export function estimateReadingTime(post: SeoBlogPost): number {
         ];
       }
 
+      if (block._type === 'imageGallery') {
+        return [
+          block.title,
+          ...(block.images?.flatMap((image) => [image.alt, image.caption]) || []),
+        ];
+      }
+
       return block.children?.map((child) => child.text || '') || [];
     })
     .join(' ') || '';
